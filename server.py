@@ -1,7 +1,7 @@
 #!/bin/env python3
 import uvicorn
 from fastapi import Body,FastAPI,HTTPException
-from typing import Annotated
+from typing import Annotated,Union
 from pydantic import BaseModel
 import zmq
 import os
