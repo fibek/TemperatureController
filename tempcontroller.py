@@ -56,11 +56,11 @@ if(hello == b'hello'):
 def dumptofile():
     data = {
       "params": {
-        "T": T,
-        "P": P,
-        "I": I,
-        "D": D,
-        "ST": ST
+        "T": float(T),
+        "P": float(P),
+        "I": float(I),
+        "D": float(D),
+        "ST": int(ST)
       }
     }
     try:
