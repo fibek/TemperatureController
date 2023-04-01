@@ -48,11 +48,11 @@ def handler1(signal, frame):
         global T,P,I,D,ST
         T,P,I,D,ST = q
         print(T,P,I,D,ST)
-        pid.SetPoint = T
-        pid.setKp(P)
-        pid.setKi(I)
-        pid.setKd(D)
-        pid.setSampleTime(ST)
+        pid.SetPoint = float(T)
+        pid.setKp(float(P))
+        pid.setKi(float(I))
+        pid.setKd(float(D))
+        pid.setSampleTime(int(ST))
         socket.send(b'ok')
     except:
         socket.send(b'error')
