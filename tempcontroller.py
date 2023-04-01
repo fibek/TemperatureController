@@ -27,11 +27,11 @@ print("Current temperature: ",temperature)
 try:
     with open('config.json') as f:
         data = json.load(f)
-        T = data['params']['T']
-        P = data['params']['P']
-        I = data['params']['I']
-        D = data['params']['D']
-        ST = data['params']['ST']
+        T  = float(data['params']['T'])
+        P  = float(data['params']['P'])
+        I  = float(data['params']['I'])
+        D  = float(data['params']['D'])
+        ST = int(data['params']['ST'])
         f.close()
 except:
     T = 31.0
@@ -56,11 +56,11 @@ if(hello == b'hello'):
 def dumptofile():
     data = {
       "params": {
-        "T": float(T),
-        "P": float(P),
-        "I": float(I),
-        "D": float(D),
-        "ST": int(ST)
+        "T": T,
+        "P": P,
+        "I": I,
+        "D": D,
+        "ST": ST
       }
     }
     try:
