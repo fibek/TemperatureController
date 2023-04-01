@@ -76,8 +76,7 @@ try:
         try:
             temperature = sensor.get_temperature()
         except:
-            time.sleep(0.5)
-            temperature = sensor.get_temperature()
+            continue
 
         print('TEMPERATURE: ',temperature)
         if temperature is not None:
