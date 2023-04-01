@@ -99,14 +99,14 @@ signal.signal(signal.SIGUSR2, handler2)
 print('PID controller is running..')
 try:
     while 1:
-        pid.update(feedback)
-        output = pid.output
         try:
             temperature = sensor.get_temperature()
         except:
             continue
 
         if temperature is not None:
+            pid.update(temperature)
+            output = pid.output
             print(f'SetPoint={pid.SetPoint:0.1f}*C MeasuredTemp={temperature:0.1f}*C pid.out={output:0.1f}')
             if output > 0:
                 print('turn on heater')

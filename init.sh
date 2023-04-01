@@ -3,7 +3,8 @@
 # /etc/init.d/init.sh
 ### BEGIN INIT INFO
 # Provides:          init.sh
-# Required-Start:    $all Required-Stop:     $all
+# Required-Start:    $all 
+# Required-Stop:     $all
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
 # Short-Description:
