@@ -43,10 +43,11 @@ async def getstatus():
         r = socket.recv().decode().split('|')
         return {
                     "Temperature":r[0],
-                    "P":r[1],
-                    "I":r[2],
-                    "D":r[3],
-                    "SampleTime":r[4]
+                    "T":r[1],
+                    "P":r[2],
+                    "I":r[3],
+                    "D":r[4],
+                    "SampleTime":r[5]
                 }
     except:
         raise HTTPException(status_code=404, detail="Unexpected error")

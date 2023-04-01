@@ -1,38 +1,38 @@
 #!/bin/env python3
-import w1thermsensor
-import RPi.GPIO as GPIO
-import PID
+# import w1thermsensor
+# import RPi.GPIO as GPIO
+# import PID
 import time
 
 import os
 import zmq
 import signal
 
-COOLING = 17 # cooling device pin
-HEATING = 22 # heater device pin
+# COOLING = 17 # cooling device pin
+# HEATING = 22 # heater device pin
 
-GPIO.setmode(GPIO.BCM)
-GPIO.setwarnings(False)
+# GPIO.setmode(GPIO.BCM)
+# GPIO.setwarnings(False)
 
-GPIO.setup(COOLING, GPIO.OUT) # cooler
-GPIO.output(COOLING, GPIO.LOW)
+# GPIO.setup(COOLING, GPIO.OUT) # cooler
+# GPIO.output(COOLING, GPIO.LOW)
 
-GPIO.setup(HEATING, GPIO.OUT) # heating
-GPIO.output(HEATING, GPIO.LOW)
+# GPIO.setup(HEATING, GPIO.OUT) # heating
+# GPIO.output(HEATING, GPIO.LOW)
 
-sensor = w1thermsensor.W1ThermSensor()
-temp = sensor.get_temperature()
-print("Current temperature: ",temp)
+# sensor = w1thermsensor.W1ThermSensor()
+# temperature = sensor.get_temperature()
+# print("Current temperature: ",temperature)
 
 T = 31.0
 P = 1.4
 I = 1
 D = 0.001
 ST = 15 # SampleTime
-pid = PID.PID(P, I, D)
+# pid = PID.PID(P, I, D)
 
-pid.SetPoint = T
-pid.setSampleTime(ST)
+# pid.SetPoint = T
+# pid.setSampleTime(ST)
 
 context = zmq.Context()
 socket = context.socket(zmq.REP)
@@ -60,7 +60,7 @@ def handler1(signal, frame):
 def handler2(signal, frame):
     try:
         print(socket.recv().decode())
-        socket.send(f'{T}|{P}|{I}|{D}|{ST}'.encode('UTF-8'))
+        socket.send(f'{CT}|{T}|{P}|{I}|{D}|{ST}'.encode('UTF-8'))
     except:
         socket.send(b'error')
 
@@ -73,8 +73,12 @@ try:
     while 1:
         pid.update(feedback)
         output = pid.output
+        try:
+            temperature = sensor.get_temperature()
+        except:
+            time.sleep(0.5)
+            temperature = sensor.get_temperature()
 
-        temperature = sensor.get_temperature()
         print('TEMPERATURE: ',temperature)
         if temperature is not None:
             if pid.SetPoint > 0:
