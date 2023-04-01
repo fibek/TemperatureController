@@ -17,11 +17,11 @@ socket.send(b'hello')
 pid = int(socket.recv().decode())
 
 class PIDparams(BaseModel):
-    temp: float | None = 19.0
-    p: float | None = 1.4
-    i: float | None = 1
-    d: float | None = 0.001
-    st: int | None = 15
+    temp: Union[float,None] = 19.0
+    p: Union[float,None] = 1.4
+    i: Union[float,None] = 1
+    d: Union[float,None] = 0.001
+    st:Union[ int ,None] = 15
 
 @app.put("/pid/set")
 async def setparams(params: Annotated[PIDparams, Body(embed=True)]):
