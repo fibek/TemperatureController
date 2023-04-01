@@ -60,7 +60,7 @@ def handler1(signal, frame):
 def handler2(signal, frame):
     try:
         print(socket.recv().decode())
-        socket.send(f'{CT}|{T}|{P}|{I}|{D}|{ST}'.encode('UTF-8'))
+        socket.send(f'{temperature}|{T}|{P}|{I}|{D}|{ST}'.encode('UTF-8'))
     except:
         socket.send(b'error')
 
