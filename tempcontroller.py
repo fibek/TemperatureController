@@ -35,7 +35,7 @@ try:
         f.close()
 except:
     T = 31.0
-    P = 1.4
+    P = 0.4
     I = 1
     D = 0.001
     ST = 15 # SampleTime
@@ -98,7 +98,6 @@ signal.signal(signal.SIGUSR2, handler2)
 
 print('PID controller is running..')
 try:
-    feedback = 0
     while 1:
         pid.update(feedback)
         output = pid.output
@@ -107,12 +106,8 @@ try:
         except:
             continue
 
-        print('TEMPERATURE: ',temperature)
         if temperature is not None:
-            if pid.SetPoint > 0:
-                feedback += temperature + output
-
-            print(f'desired.temp={pid.SetPoint:0.1f}*C temp={temperature:0.1f}*C pid.out={output:0.1f} feedback={feedback:0.1f}')
+            print(f'SetPoint={pid.SetPoint:0.1f}*C MeasuredTemp={temperature:0.1f}*C pid.out={output:0.1f}')
             if output > 0:
                 print('turn on heater')
                 GPIO.output(COOLING, GPIO.LOW)
