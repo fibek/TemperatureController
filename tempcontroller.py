@@ -3,7 +3,7 @@ import w1thermsensor
 import RPi.GPIO as GPIO
 import PID
 import time
-
+import json
 import os
 import zmq
 import signal
@@ -24,11 +24,22 @@ sensor = w1thermsensor.W1ThermSensor()
 temperature = sensor.get_temperature()
 print("Current temperature: ",temperature)
 
-T = 31.0
-P = 1.4
-I = 1
-D = 0.001
-ST = 15 # SampleTime
+try:
+    with open('config.json') as f:
+        data = json.load(f)
+        T = data['params']['T']
+        P = data['params']['P']
+        I = data['params']['I']
+        D = data['params']['D']
+        ST = data['params']['ST']
+        f.close()
+except:
+    T = 31.0
+    P = 1.4
+    I = 1
+    D = 0.001
+    ST = 15 # SampleTime
+
 pid = PID.PID(P, I, D)
 
 pid.SetPoint = T
@@ -42,6 +53,23 @@ if(hello == b'hello'):
     processid = os.getpid()
     socket.send(str(processid).encode());
 
+def dumptofile():
+    data = {
+      "params": {
+        "T": T,
+        "P": P,
+        "I": I,
+        "D": D,
+        "ST": ST
+      }
+    }
+    try:
+        with open('config.json','w') as f:
+            f.write(json.dumps(data))
+            f.close()
+    except:
+        pass
+
 def handler1(signal, frame):
     try: 
         q = socket.recv().decode().split('|')
@@ -53,6 +81,7 @@ def handler1(signal, frame):
         pid.setKi(float(I))
         pid.setKd(float(D))
         pid.setSampleTime(int(ST))
+        dumptofile()
         socket.send(b'ok')
     except:
         socket.send(b'error')
@@ -86,12 +115,12 @@ try:
             print(f'desired.temp={pid.SetPoint:0.1f}*C temp={temperature:0.1f}*C pid.out={output:0.1f} feedback={feedback:0.1f}')
             if output > 0:
                 print('turn on heater')
-                # GPIO.output(COOLING, GPIO.LOW)
-                # GPIO.output(HEATING, GPIO.HIGH)
+                GPIO.output(COOLING, GPIO.LOW)
+                GPIO.output(HEATING, GPIO.HIGH)
             elif output < 0:
                 print('turn on cooler')
-                # GPIO.output(HEATING, GPIO.LOW)
-                # GPIO.output(COOLING, GPIO.HIGH)
+                GPIO.output(HEATING, GPIO.LOW)
+                GPIO.output(COOLING, GPIO.HIGH)
 
 
         time.sleep(0.5)
