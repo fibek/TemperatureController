@@ -1,3 +1,5 @@
+#!/bin/env python3
+import uvicorn
 from fastapi import Body,FastAPI,HTTPException
 from typing import Annotated
 from pydantic import BaseModel
@@ -48,4 +50,8 @@ async def getstatus():
                 }
     except:
         raise HTTPException(status_code=404, detail="Unexpected error")
+
     
+if __name__ == "__main__":
+    uvicorn.run("server:app", host="0.0.0.0", port=8000, log_level="info")
+
